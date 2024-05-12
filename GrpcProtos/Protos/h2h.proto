@@ -1,0 +1,52 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "APPGrpc";
+
+package GrpcTest;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+// 服务IDL定义
+service DoubleStreamService {
+  rpc chat (stream ChatRequest) returns (stream ChatResponse) {
+  }
+}
+// 请求
+message ChatRequest {
+  int32 userId = 1;
+  string msg = 2;
+  string Team1 = 3;
+  string Team2 = 4;
+}
+// 响应
+message ChatResponse {
+  uint32 userId = 1;
+  string msg = 2;
+}
+
+service H2H {
+  rpc Details (H2HRequest) returns (H2HReply) {}
+}
+
+message H2HRequest {
+  string Team1 = 1;
+  string Team2 = 2;
+}
+message H2HReply {
+  uint32 Won1 = 1;
+  uint32 Won2 = 2;
+  bool Success = 3;
+}

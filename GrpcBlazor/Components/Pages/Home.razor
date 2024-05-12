@@ -1,0 +1,24 @@
+﻿@page "/"
+@using Grpc.Net.Client
+@using APPGrpc
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+<h1>哈哈哈：@_message</h1>
+
+Welcome to your new app.
+
+@code {
+  private string _message = "GRPC Blazor";
+
+  override protected async Task OnInitializedAsync()
+  {
+    using var channel = GrpcChannel.ForAddress("https://localhost:7119");
+    var client = new Greeter.GreeterClient(channel);
+    var reply = await client.SayHelloAsync(
+                      new HelloRequest { Name = "GreeterClient" });
+    Console.WriteLine("Greeting: " + reply.Message);
+    _message = reply.Message;
+  }
+}

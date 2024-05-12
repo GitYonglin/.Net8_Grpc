@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.26.1" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.62.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.63.0">
+		</PackageReference>
+	</ItemGroup>
+<!-- Grpc proto -->
+	<ItemGroup>
+		<Protobuf Include="Protos\h2h.proto"
+							GrpcServices="Server, Client"
+							Generator="MSBuild:Compile" />
+		<Content Include="@(Protobuf)" />
+		<None Remove="@(Protobuf)" />
+	</ItemGroup>
+<!-- Grpc proto -->
+</Project>
