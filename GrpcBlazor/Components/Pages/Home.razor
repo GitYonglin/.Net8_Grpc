@@ -1,24 +1,109 @@
 ﻿@page "/"
+
+@using Grpc.Core
 @using Grpc.Net.Client
 @using APPGrpc
+@inject GrpcProtos.Clients.ReverseClient Rcs
+@rendermode InteractiveServer
+@implements IDisposable
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
-<h1>哈哈哈：@_message</h1>
+<p>SendString2: @SendString2</p>
+<p>i: @i</p>
+
+<div>
+  <input type="text" @bind-value=Name class="form-control" placeholder="用户名" />
+  <button @onclick="Login" class="btn btn-primary" type="button">登录</button>
+</div>
+<div>
+  <div>
+    @foreach (var item in Users)
+    {
+      <p>@item</p>
+    }
+  </div>
+  <div>
+    用户：
+    <input type="text" @bind-value=UserName class="form-control" placeholder="用户名" />
+  </div>
+  <div>
+    内容：
+    <input type="text" @bind-value=SendString class="form-control" placeholder="请输入内容" />
+  </div>
+  <button @onclick="SendMessage" class="btn btn-primary" type="button">发送</button>
+  <div>
+    @foreach (var item in _messages)
+    {
+      <p>@item</p>
+    }
+  </div>
+</div>
 
 Welcome to your new app.
 
 @code {
-  private string _message = "GRPC Blazor";
+  // private static AsyncDuplexStreamingCall<Request, Reply> stream;
+  private List<string> _messages = [];
+  private List<string> Users = [];
+  private string Name = "";
+  private string UserName = "";
+  private string SendString = "刚刚开始";
+  private string SendString2 = "";
 
-  override protected async Task OnInitializedAsync()
+  private static int i = 0;
+  private static int i2 = 0;
+  private static int i3 = 0;
+
+  protected override Task OnAfterRenderAsync(bool firstRender)
   {
-    using var channel = GrpcChannel.ForAddress("https://localhost:7119");
-    var client = new Greeter.GreeterClient(channel);
-    var reply = await client.SayHelloAsync(
-                      new HelloRequest { Name = "GreeterClient" });
-    Console.WriteLine("Greeting: " + reply.Message);
-    _message = reply.Message;
+
+    if (firstRender)
+    {
+      Console.WriteLine($"初始化");
+      // Rcs.Init(Guid.NewGuid().ToString(), s =>
+      // {
+      //   Console.WriteLine(s);
+      //   _messages.Add(s);
+      //   InvokeAsync(StateHasChanged);
+      // });
+    }
+    return base.OnAfterRenderAsync(firstRender);
+  }
+  override protected void OnInitialized()
+  {
+    i3++;
+    Console.WriteLine($"i3初始化{i3}");
+    Console.WriteLine($"i2初始化{i2}");
+    base.OnInitialized();
+  }
+  public void Dispose()
+  {
+    Console.WriteLine("结束了");
+  }
+  private void Login()
+  {
+    if (Name != "")
+    {
+      Rcs.Init(s =>
+       {
+         Console.WriteLine($"数据:{s}");
+         AddMessages(s);
+       });
+    }
+  }
+  // 客户端发送 Bidirectional
+  private async Task SendMessage()
+  {
+    SendString2 = $"{UserName}:{SendString}";
+    AddMessages(SendString2);
+    await Rcs.Send(SendString2);
+  }
+
+  private void AddMessages(string s)
+  {
+    _messages.Add(s);
+    InvokeAsync(StateHasChanged);
   }
 }

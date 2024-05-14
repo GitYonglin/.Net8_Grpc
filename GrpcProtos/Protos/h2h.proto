@@ -19,34 +19,17 @@ message HelloReply {
   string message = 1;
 }
 
-// 服务IDL定义
-service DoubleStreamService {
-  rpc chat (stream ChatRequest) returns (stream ChatResponse) {
-  }
-}
-// 请求
-message ChatRequest {
-  int32 userId = 1;
-  string msg = 2;
-  string Team1 = 3;
-  string Team2 = 4;
-}
-// 响应
-message ChatResponse {
-  uint32 userId = 1;
-  string msg = 2;
+service Reverse {
+ rpc Simple (Request) returns (Reply);
+ rpc ClientSide (stream Request) returns (Reply);
+ rpc ServerSide (Request) returns (stream Reply);
+ rpc Bidirectional (stream Request) returns (stream Reply);
 }
 
-service H2H {
-  rpc Details (H2HRequest) returns (H2HReply) {}
+message Request {
+ string message = 1;
 }
 
-message H2HRequest {
-  string Team1 = 1;
-  string Team2 = 2;
-}
-message H2HReply {
-  uint32 Won1 = 1;
-  uint32 Won2 = 2;
-  bool Success = 3;
+message Reply {
+ string message = 1;
 }

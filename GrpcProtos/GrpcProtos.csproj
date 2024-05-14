@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
@@ -6,18 +6,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Protobuf" Version="3.26.1" />
-		<PackageReference Include="Grpc.Net.Client" Version="2.62.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.63.0">
+		<PackageReference Include="Google.Protobuf" />
+		<PackageReference Include="Grpc.Net.Client" />
+		<PackageReference Include="Grpc.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-<!-- Grpc proto -->
+
+	<!-- Grpc proto -->
 	<ItemGroup>
-		<Protobuf Include="Protos\h2h.proto"
-							GrpcServices="Server, Client"
-							Generator="MSBuild:Compile" />
+		<Protobuf Include="Protos\h2h.proto" GrpcServices="Server, Client" Generator="MSBuild:Compile" />
 		<Content Include="@(Protobuf)" />
 		<None Remove="@(Protobuf)" />
 	</ItemGroup>
-<!-- Grpc proto -->
+	<!-- Grpc proto -->
 </Project>

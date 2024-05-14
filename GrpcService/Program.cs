@@ -1,4 +1,6 @@
-using GrpcService.Services;
+using GrpcProtos.Services;
+//using GrpcService.Services;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 //app.MapGrpcService<GreeterService>();
-app.MapGrpcService<GrpcTestService>();
+app.MapGrpcService<ReverseService>();
+//app.MapGrpcService<ReverseService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();
